@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Todo</string>
+    <string name="done">Сделано</string>
+    <string name="plan">Запланировано</string>
+    <string name="save">Сохранить</string>
+    <string name="insert">Добавить</string>
+    <string name="new_task">Новая задача</string>
+</resources>
