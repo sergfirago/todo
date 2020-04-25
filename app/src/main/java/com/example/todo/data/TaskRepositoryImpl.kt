@@ -1,5 +1,6 @@
 package com.example.todo.data
 
+import com.example.todo.AppDispatchers
 import com.example.todo.data.db.TaskDao
 import com.example.todo.data.db.toDomain
 import com.example.todo.data.db.toNewTaskSM
@@ -8,7 +9,6 @@ import com.example.todo.domain.TaskRepository
 import com.example.todo.domain.entities.Task
 import com.example.todo.domain.entities.TaskData
 import com.example.todo.domain.entities.TaskKey
-import com.example.todo.ui.AppDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow

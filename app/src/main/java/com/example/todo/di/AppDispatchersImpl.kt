@@ -1,6 +1,6 @@
 package com.example.todo.di
 
-import com.example.todo.ui.AppDispatchers
+import com.example.todo.AppDispatchers
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.newSingleThreadContext

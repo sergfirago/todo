@@ -3,10 +3,10 @@ package com.example.todo.ui.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.todo.AppDispatchers
 import com.example.todo.domain.TaskRepository
 import com.example.todo.domain.entities.Task
 import com.example.todo.domain.entities.TaskKey
-import com.example.todo.ui.AppDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
