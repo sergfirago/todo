@@ -1,13 +1,14 @@
 package com.example.todo.data
 
-import com.example.todo.data.db.*
+import com.example.todo.data.db.TaskDao
 import com.example.todo.data.db.toDomain
 import com.example.todo.data.db.toNewTaskSM
+import com.example.todo.data.db.toTaskSM
 import com.example.todo.domain.TaskRepository
 import com.example.todo.domain.entities.Task
 import com.example.todo.domain.entities.TaskData
 import com.example.todo.domain.entities.TaskKey
-import kotlinx.coroutines.Dispatchers
+import com.example.todo.ui.AppDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -16,12 +17,14 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 
-
-internal class TaskRepositoryImpl constructor(private val dao: TaskDao) : TaskRepository {
+internal class TaskRepositoryImpl constructor(
+    private val dao: TaskDao,
+    dispatchers: AppDispatchers
+) : TaskRepository {
     private val taskChannel = BroadcastChannel<List<Task>>(1)
 
     init {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(dispatchers.disk) {
             dao.tasks().collect { list ->
                 taskChannel.send(list.map { it.toDomain() })
             }
@@ -38,7 +41,7 @@ internal class TaskRepositoryImpl constructor(private val dao: TaskDao) : TaskRe
     }
 
     override suspend fun addTask(taskData: TaskData): Task {
-        val key = dao.insert( taskData.toNewTaskSM())
+        val key = dao.insert(taskData.toNewTaskSM())
         return getTask(TaskKeyImpl.create(key))
     }
 

@@ -5,13 +5,14 @@ import com.example.todo.data.TaskRepositoryImpl
 import com.example.todo.data.db.TaskDao
 import com.example.todo.data.db.TaskDataBase
 import com.example.todo.domain.TaskRepository
+import com.example.todo.ui.AppDispatchers
 import com.example.todo.ui.details.DetailViewModel
 import com.example.todo.ui.list.ListViewModel
 import org.koin.android.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val appModule = module {
-    single<TaskRepository> { TaskRepositoryImpl(get()) }
+    single<TaskRepository> { TaskRepositoryImpl(get(), get()) }
     single<TaskDataBase> {
         Room.databaseBuilder(
             get(),
@@ -19,6 +20,7 @@ val appModule = module {
         ).build()
     }
     single<TaskDao> { get<TaskDataBase>().taskDao() }
-    viewModel { ListViewModel(get()) }
-    viewModel { DetailViewModel(get()) }
+    single<AppDispatchers> { AppDispatchersImpl() }
+    viewModel { ListViewModel(get(), get()) }
+    viewModel { DetailViewModel(get(), get()) }
 }

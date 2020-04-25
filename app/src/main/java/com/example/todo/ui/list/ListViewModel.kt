@@ -6,14 +6,16 @@ import androidx.lifecycle.ViewModel
 import com.example.todo.domain.TaskRepository
 import com.example.todo.domain.entities.Task
 import com.example.todo.domain.entities.TaskKey
-import kotlinx.coroutines.Dispatchers
+import com.example.todo.ui.AppDispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class ListViewModel(private val repository: TaskRepository) : ViewModel() {
+class ListViewModel(
+    private val repository: TaskRepository,
+    private val dispatchers: AppDispatchers
+) : ViewModel() {
 
     private val _tasks = MutableLiveData<List<Task>>()
     val tasks: LiveData<List<Task>> = _tasks
@@ -23,16 +25,16 @@ class ListViewModel(private val repository: TaskRepository) : ViewModel() {
     }
 
     fun changeDone(key: TaskKey) {
-        GlobalScope.launch {
+        GlobalScope.launch(dispatchers.disk) {
             repository.checkTask(key)
         }
     }
 
     private fun observeTaskFlow() {
-        GlobalScope.launch(Dispatchers.IO) {
+        GlobalScope.launch(dispatchers.disk) {
             repository.tasksFlow()
                 .collect { list ->
-                    withContext(Dispatchers.Main) {
+                    withContext(dispatchers.main) {
                         _tasks.value = list
                     }
                 }
